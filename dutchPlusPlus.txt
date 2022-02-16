@@ -1,13 +1,13 @@
-baan janee even getal n{
-    als n gelijkaan 0{
-        geefterug onwaar
+janee even(getal n) {
+    als (n gelijkaan 0){
+        geefterug onwaar;
     }
-    geefterug bellen odd(n-1)
+    geefterug oneven(n min 1);
 }
 
-baan janee odd getal n{
-    als n gelijkaan 0{
-        geefterug waar
+janee oneven(getal n) {
+    als (n gelijkaan 0){
+        geefterug waar;
     }
-    geefterug bellen even(n-1)
+    geefterug even(n min 1);
 }
