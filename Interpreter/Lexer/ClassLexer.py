@@ -1,6 +1,7 @@
 from typing import List
-from ClassToken import *
-from copy import *
+from Interpreter.Lexer.ClassToken import Token, TokenData, TokenType
+from copy import copy
+import operator
 
 class Lexer:
     def __init__(self, text: str) -> None:
@@ -47,45 +48,45 @@ class Lexer:
 
             match word:
                 case TokenType.BOOL.value:
-                    return Token(TokenType.BOOL, None, current_token_data)
+                    return Token(TokenType.BOOL, bool, current_token_data)
                 case TokenType.INT.value:
-                    return Token(TokenType.INT, None, current_token_data)
+                    return Token(TokenType.INT, int, current_token_data)
                 case TokenType.FLOAT.value:
-                    return Token(TokenType.FLOAT, None, current_token_data)
+                    return Token(TokenType.FLOAT, float, current_token_data)
                 case TokenType.STRING.value:
-                    return Token(TokenType.STRING, None, current_token_data)
+                    return Token(TokenType.STRING, str, current_token_data)
                 case TokenType.TRUE.value:
-                    return Token(TokenType.TRUE, None, current_token_data)
+                    return Token(TokenType.TRUE, True, current_token_data)
                 case TokenType.FALSE.value:
-                    return Token(TokenType.FALSE, None, current_token_data)
+                    return Token(TokenType.FALSE, False, current_token_data)
                 case TokenType.ADDIDION.value:
-                    return Token(TokenType.ADDIDION, None, current_token_data)
+                    return Token(TokenType.ADDIDION, operator.add, current_token_data)
                 case TokenType.SUBTRACTION.value:
-                    return Token(TokenType.SUBTRACTION, None, current_token_data)
+                    return Token(TokenType.SUBTRACTION, operator.sub, current_token_data)
                 case TokenType.MULTIPLICATION.value:
-                    return Token(TokenType.MULTIPLICATION, None, current_token_data)
+                    return Token(TokenType.MULTIPLICATION, operator.mul, current_token_data)
                 case TokenType.DIVISION.value:
-                    return Token(TokenType.DIVISION, None, current_token_data)
+                    return Token(TokenType.DIVISION, operator.truediv, current_token_data)
                 case TokenType.IS.value:
                     return Token(TokenType.IS, None, current_token_data)
                 case TokenType.EQUALTO.value:
-                    return Token(TokenType.EQUALTO, None, current_token_data)
+                    return Token(TokenType.EQUALTO, operator.eq, current_token_data)
                 case TokenType.NOTEQUAL.value:
-                    return Token(TokenType.NOTEQUAL, None, current_token_data)
+                    return Token(TokenType.NOTEQUAL, operator.ne, current_token_data)
                 case TokenType.GREATERTHAN.value:
-                    return Token(TokenType.GREATERTHAN, None, current_token_data)
+                    return Token(TokenType.GREATERTHAN, operator.gt, current_token_data)
                 case TokenType.GREATERTHANOREQUALTO.value:
-                    return Token(TokenType.GREATERTHANOREQUALTO, None, current_token_data)
+                    return Token(TokenType.GREATERTHANOREQUALTO, operator.ge, current_token_data)
                 case TokenType.LESSTHAN.value:
-                    return Token(TokenType.LESSTHAN, None, current_token_data)
+                    return Token(TokenType.LESSTHAN, operator.lt, current_token_data)
                 case TokenType.LESSTHANOREQUALTO.value:
-                    return Token(TokenType.LESSTHANOREQUALTO, None, current_token_data)
+                    return Token(TokenType.LESSTHANOREQUALTO, operator.le, current_token_data)
                 case TokenType.LOGICALNOT.value:
-                    return Token(TokenType.LOGICALNOT, None, current_token_data)
+                    return Token(TokenType.LOGICALNOT, operator.not_, current_token_data)
                 case TokenType.LOGICALAND.value:
-                    return Token(TokenType.LOGICALAND, None, current_token_data)
+                    return Token(TokenType.LOGICALAND, operator.and_, current_token_data)
                 case TokenType.LOGICALOR.value:
-                    return Token(TokenType.LOGICALOR, None, current_token_data)
+                    return Token(TokenType.LOGICALOR, operator.or_, current_token_data)
                 case TokenType.IF.value:
                     return Token(TokenType.IF, None, current_token_data)
                 case TokenType.ELSEIF.value:
@@ -140,7 +141,7 @@ class Lexer:
                 self.add_pos(1)
                 return Token(TokenType.SEMICOLON, None, current_token_data)
 
-        raise Exception("Character not recognised: " + current_char + current_token_data.__str__())
+        raise Exception(f"Character '{current_char}' not recognised: " + current_token_data.__str__())
 
     def get_next_digit(self, text: str, pos: int) -> str:
         # add chars if next char is a digit or a dot (floats)
@@ -153,15 +154,21 @@ class Lexer:
             return text[pos] + self.get_next_word(text, pos+1)
         return ''
 
-if __name__ == "__main__":
-    with open('dutchPlusPlus.txt', 'r') as file:
-        data = file.read()
+def get_token_list(data: str, debug : bool = False) -> List[Token]:
+    # with open('dutchPlusPlus.txt', 'r') as file:
+    #     data = file.read()
+
     a = Lexer(data)
     current_tokens : List[TokenType] = []
     current_tokens.append(a.get_next_token())
+
     while not current_tokens[-1].__str__().__contains__('EOF'):
         current_tokens.append(a.get_next_token())
+
+    if debug:
+        for token in current_tokens:
+            print(token)
+    return current_tokens
     
-    for token in current_tokens:
-        print(token)
-    
+if __name__ == "__main__":
+    get_token_list(True)

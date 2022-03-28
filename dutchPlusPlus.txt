@@ -1,13 +1,16 @@
-janee even(getal n) {
-    als (n gelijkaan 0){
-        geefterug onwaar;
-    }
-    geefterug oneven(n min 1);
-}
+janee oneven(getal n);
+janee even(getal n);
 
 janee oneven(getal n) {
     als (n gelijkaan 0){
-        geefterug waar;
+        geefterug onwaar;
     }
     geefterug even(n min 1);
+}
+
+janee even(getal n) {
+    als (n gelijkaan 0){
+        geefterug waar;
+    }
+    geefterug oneven(n min 1);
 }

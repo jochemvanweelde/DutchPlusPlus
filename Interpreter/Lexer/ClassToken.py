@@ -1,6 +1,8 @@
 from dataclasses import dataclass
 from enum import Enum
 
+from typing import List
+
 #====ALL TOKENS====
 class TokenType(Enum):
     #Data Types Tokens
@@ -54,8 +56,8 @@ class TokenType(Enum):
     WHILE       = 'terwijl'     # while
     PRINT       = 'print'       # cout <<
     RETURN      = 'geefterug'   # return
-    VARIABLE    = any           # name of variable
-    DIGIT       = any           # any digit
+    VARIABLE    = 'VARIABLE'    # name of variable
+    DIGIT       = 'DIGIT'       # any digit
     EOF         = 'EVB'         # EOF
 
 @dataclass
@@ -63,19 +65,11 @@ class TokenData:
     line: int
     char: int
 
+@dataclass
 class Token:
-    def __init__(self, type: TokenType, value: str, token_data: TokenData) -> None:
-        self.type = type
-        self.value = value
-        self.token_data = token_data
+    type: TokenType
+    value: any
+    token_data: TokenData
 
-    def __str__(self) -> str:
-        return 'Token({type}, {value}, {token_data})'.format(
-            type=self.type,
-            value=repr(self.value),
-            token_data=repr(self.token_data)
-        )
     
-    def __repr__(self) -> str:
-        return self.__str__()
 
