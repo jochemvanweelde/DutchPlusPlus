@@ -17,8 +17,6 @@ class Parser:
         # self.ast: Node = []
         pass
 
-
-
     def parse(self, token_list: List[Token]) -> List[Node]:
         token_list_count = 0
         tokens_for_node: List[Token] = []
@@ -33,7 +31,7 @@ class Parser:
         while True:
             tokens_for_node.append(token_list.pop(0))
             token_list_count += 1
-            if tokens_for_node[-1].type in [TokenType.SEMICOLON, TokenType.COMMA] and (left_bracket_count + right_bracket_count) == 0:
+            if tokens_for_node[-1].type in [TokenType.SEMICOLON] and (left_bracket_count + right_bracket_count) == 0:
                 break
             if tokens_for_node[-1].type == TokenType.LEFTCURLYBRACKET:
                 left_bracket_count += 1
@@ -43,7 +41,7 @@ class Parser:
                 break
             if len(token_list) == 0:
                 break
-        
+
         #Check len < 2 for VariableCall- or ValueNode
         if len(tokens_for_node) <= 2:
 
@@ -87,6 +85,11 @@ class Parser:
         elif tokens_for_node[0].type in [TokenType.RETURN]:
             result = ReturnNode(self.parse(tokens_for_node[1:])[0])
 
+        #PrintNode
+        elif tokens_for_node[0].type in [TokenType.PRINT]:
+            to_print : List[Token] = tokens_for_node[2:-1]
+            result = PrintNode(self.parse(to_print)[0])
+
         #FunctionDefinitionNode
         elif tokens_for_node[-1].type == TokenType.RIGHTCURLYBRACKET:
             return_type: type = tokens_for_node[0].value
@@ -98,6 +101,10 @@ class Parser:
                 if parameter_list[-1].type == TokenType.RIGHTROUNDBRACKET:
                     parameter_list.pop()
                     break
+            for parameter in parameter_list:
+                if parameter.type == TokenType.COMMA:
+                    parameter.type = TokenType.SEMICOLON
+            parameter_list.append(Token(TokenType.SEMICOLON, ";", None))
             parameter_nodes: List[Node] = self.parse(parameter_list)
             body: List[Token] = self.parse(tokens_for_node[1:-1])
             result = FunctionDefinitionNode(function_name, return_type, parameter_nodes, body)
@@ -110,11 +117,17 @@ class Parser:
             result = ExpressionNode(lhs, expression_type, rhs)
             pass
 
+        #VariableAssignmentNode
+        elif tokens_for_node[1].type == TokenType.IS:
+            variable_name: str = tokens_for_node[0].value
+            value: Node = self.parse(tokens_for_node[2:])[0]
+            result = VariableAssignmentNode(variable_name, value)
+
         #VariableDefinitionNode
-        elif [x for x in tokens_for_node if x.type == TokenType.IS]:
+        elif tokens_for_node[2].type == TokenType.IS:
             return_type: type = tokens_for_node[0].value
             variable_name: str = tokens_for_node[1].value
-            value: Node = self.parse(tokens_for_node[3:])
+            value: Node = self.parse(tokens_for_node[3:])[0]
             result = VariableDefinitionNode(return_type, variable_name, value)
         
         #Check if FunctionDeclarion- or FunctionCallNode
@@ -130,6 +143,10 @@ class Parser:
                     if parameter_list[-1].type == TokenType.RIGHTROUNDBRACKET:
                         parameter_list.pop()
                         break
+                for parameter in parameter_list:
+                    if parameter.type == TokenType.COMMA:
+                        parameter.type = TokenType.SEMICOLON
+                parameter_list.append(Token(TokenType.SEMICOLON, ";", None))
                 parameter_nodes: List[Node] = self.parse(parameter_list)
                 result = FunctionDeclarationNode(function_name, return_type, parameter_nodes)
 
@@ -143,6 +160,10 @@ class Parser:
                     if parameter_list[-1].type == TokenType.RIGHTROUNDBRACKET:
                         parameter_list.pop()
                         break
+                for parameter in parameter_list:
+                    if parameter.type == TokenType.COMMA:
+                        parameter.type = TokenType.SEMICOLON
+                parameter_list.append(Token(TokenType.SEMICOLON, ";", None))
                 parameter_nodes: List[Node] = self.parse(parameter_list)
                 result = FunctionCallNode(function_name, parameter_nodes)
 
@@ -165,34 +186,34 @@ class Parser:
         return [result] + self.parse(token_list)
 
 
+if __name__ == '__main__':      
 
+    longstring = """
+    a is 5;
+    """
 
-longstring = """
-getal x;
-"""
+    longstring2 = """
+    janee oneven(getal n);
+    janee even(getal n);
 
-longstring2 = """
-janee oneven(getal n);
-janee even(getal n);
-
-janee oneven(getal n) {
-    als (n gelijkaan 0){
-        geefterug onwaar;
+    janee oneven(getal n) {
+        als (n gelijkaan 0){
+            geefterug onwaar;
+        }
+        geefterug even(n min 1);
     }
-    geefterug even(n min 1);
-}
 
-janee even(getal n) {
-    als (n gelijkaan 0){
-        geefterug waar;
+    janee even(getal n) {
+        als (n gelijkaan 0){
+            geefterug waar;
+        }
+        geefterug oneven(n min 1);
     }
-    geefterug oneven(n min 1);
-}
-"""
-            
+    """
 
-token_list: List[Token] = get_token_list(longstring)
+  
+    token_list: List[Token] = get_token_list(longstring)
 
-a = Parser(token_list).parse(token_list)
+    a = Parser(token_list).parse(token_list)
 
-print(pformat(a.__str__()))
+    # print(pformat(a.__str__()))

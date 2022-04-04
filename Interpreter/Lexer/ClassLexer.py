@@ -12,21 +12,26 @@ class Lexer:
 
 
     def error(self) -> Exception:
+        '''Return basic Exception'''
         raise Exception("Error!")
 
     def add_pos(self, adder: int):
+        '''Adds a number to the current position'''
         self.pos += adder
         self.token_data.char += adder
     
     def add_new_line(self):
+        '''Adds a new line to the current position'''
         self.add_pos(1)
         self.token_data.line += 1
         self.token_data.char = 1
 
     def is_eof(self, text: str, pos: int) -> bool:
+        '''Return True if pos is at the end of the text'''
         return pos > len(text) - 1
 
     def get_next_token(self) -> Token:
+        '''Returns the next token'''
         if self.pos > len(self.text) - 1:
             return Token(TokenType.EOF, None, self.token_data)
         
@@ -141,22 +146,23 @@ class Lexer:
                 self.add_pos(1)
                 return Token(TokenType.SEMICOLON, None, current_token_data)
 
-        raise Exception(f"Character '{current_char}' not recognised: " + current_token_data.__str__())
+        raise Exception(f"(Illegal) Character '{current_char}' not recognised: " + current_token_data.__str__())
 
     def get_next_digit(self, text: str, pos: int) -> str:
-        # add chars if next char is a digit or a dot (floats)
+        '''add chars if next char is a digit or a dot (floats)'''
         if not self.is_eof(text, pos) and (text[pos].isdigit() or text[pos] == '.'):
             return text[pos] + self.get_next_digit(text, pos+1)
         return ''
 
     def get_next_word(self, text: str, pos: int) -> str:
+        '''get the next word'''
         if not self.is_eof(text, pos) and text[pos].isalpha():
             return text[pos] + self.get_next_word(text, pos+1)
         return ''
 
 def get_token_list(data: str, debug : bool = False) -> List[Token]:
-    # with open('dutchPlusPlus.txt', 'r') as file:
-    #     data = file.read()
+    with open('dutchPlusPlus.txt', 'r') as file:
+        data = file.read()
 
     a = Lexer(data)
     current_tokens : List[TokenType] = []
