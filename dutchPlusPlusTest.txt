@@ -1,5 +1,7 @@
-getal test(getal n){
+getal geefGetal(getal n){
     geefterug n;
 }
 
-print(test(5));
+getal a is 5;
+
+print(geefGetal(a) gelijkaan 2 plus 3);

@@ -1,6 +1,5 @@
 import copy
 from pprint import pprint
-import re
 from typing import List
 from Lexer.ClassToken import Token, TokenData, TokenType
 import operator
