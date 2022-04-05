@@ -1,6 +1,6 @@
 import operator
 from abc import ABC, abstractmethod
-from typing import Callable, List, Union
+from typing import Callable, List, Tuple, Union
 from Lexer.ClassToken import Token, TokenData
 from Runner.ClassLibrary import Library
 
@@ -65,7 +65,6 @@ class VariableDefinitionNode(Node):
         #     pass
         return_value = self.value.run(library)
         library[self.name] = return_value
-        pass
 
 class VariableAssignmentNode(Node):
     '''Class for variable assignments in the code'''
@@ -116,8 +115,7 @@ class FunctionDeclarationNode(Node):
         library.set_location(self.name)
         library['__return_type__'] = self.return_type
         library['__parameters__'] = self.parameters
-        for parameter in self.parameters:
-            library[parameter.name] = parameter.run(library)
+        list(map(lambda x: library.set_value(x.name, x.run(library)), self.parameters))
         library.pop_location()
 
 
@@ -136,8 +134,7 @@ class FunctionDefinitionNode(Node):
         library.set_location(self.name)
         library['__return_type__'] = self.return_type
         library['__parameters__'] = self.parameters
-        for parameter in self.parameters:
-            library[parameter.name] = parameter.run(library)
+        list(map(lambda x: library.set_value(x.name, x.run(library)), self.parameters))
         library['__body__'] = self.body
         library.pop_location()
 
@@ -150,21 +147,29 @@ class FunctionCallNode(Node):
     def __repr__(self) -> str:
         return f"FunctionCallNode(name: {self.name}, parameters: {self.parameters})"
 
+    def run_body(self, body: List[Node], library: Library):
+        if len(body) == 0:
+            library.pop_location()
+            return None
+        body[0].run(library)
+        if '__return_value__' in library:
+            return_value = library.pop('__return_value__')
+            library.pop_location()
+            return return_value
+        return self.run_body(body[1:], library)
+
     def run(self, library: Library):
         if not self.name in library:
             #TODO: Error, function is never declared
             pass
-
-        parameter_values = []
-        for parameter in self.parameters:
-            parameter_values.append(parameter.run(library))
-
-        library.set_location(self.name)
-
-        parameter_name_value_zip = zip(library['__parameters__'], parameter_values)
-        for parameter_name, parameter_value in parameter_name_value_zip:
-            library[parameter_name.name] = parameter_value
         
+        # Get the value of every parameter in this function call
+        parameter_values = list(map(lambda x: x.run(library), self.parameters))
+        # Set the location to this function call
+        library.set_location(self.name)
+        # Zip the names of the parameters with the corresponding values
+        parameter_name_value_zip: Tuple[List[VariableDeclarationNode], any] = zip(library['__parameters__'], parameter_values)
+
 
         if not '__body__' in library:
             #TODO: Error, function was declared but never defined
@@ -172,14 +177,12 @@ class FunctionCallNode(Node):
         if not len(self.parameters) == len(library['__parameters__']):
             #TODO: Error, function call does not have all the required parameters
             pass
-        for node in library['__body__']:
-            node.run(library)
-            if '__return_value__' in library:
-                return_value = library['__return_value__']
-                library.pop_location()
-                return return_value
-        library.pop_location()
-        return None
+        
+        
+        # Set the values of the parameters in the library
+        list(map(lambda x: library.set_value(x[0].name, x[1]), parameter_name_value_zip))
+
+        return self.run_body(library['__body__'], library)
 
 class ExpressionNode(Node):
     '''Class for expressions in the code'''
@@ -205,8 +208,7 @@ class ConditionalNode(Node):
 
     def run(self, library: Library):
         if self.expression.run(library):
-            for node in self.body:
-                node.run(library)
+            list(map(lambda x: x.run(library), self.body))
 
 class ReturnNode(Node):
     '''Class for return statements in the code'''
@@ -233,9 +235,9 @@ class WhileNode(Node):
         return f"WhileNode(expression: {self.expression}, body: {self.body})"
 
     def run(self, library: Library):
-        while self.expression.run(library):
-            for node in self.body:
-                node.run(library)
+        if self.expression.run(library):
+            list(map(lambda x: x.run(library), self.body))
+            self.run(library)
 
 class PrintNode(Node):
     '''Class for print statements in the code'''

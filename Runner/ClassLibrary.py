@@ -27,6 +27,12 @@ class Library():
             self.library[location] = {}
         self.location.append(location)
 
+    def pop(self, key) -> any:
+        '''removes a key from library with a location and a key'''
+        if self.location[-1] == "":
+            return self.library.pop(key)
+        return self.library[self.location[-1]].pop(key)
+
     def pop_location(self):
         '''removes the last location from the location list thus going back one location'''
         self.location.pop()
@@ -36,14 +42,14 @@ class Library():
         return self.location[-1]
 
     def set_value(self, key: str, value: any):
-        '''sets a value in library with a location and a key'''
+        '''sets a value in library with a key and value'''
         if self.location[-1] == "":
             self.library[key] = value
         else:
             self.library[self.location[-1]][key] = value
 
     def get_value(self, key: str):
-        '''gets a value from library with a location and a key'''
+        '''gets a value from library with a key and value'''
         if self.location[-1] == "":
             return self.library[key]
         # if key cannot be found on location try to find it on the global library
