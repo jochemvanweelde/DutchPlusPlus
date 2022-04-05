@@ -1,12 +1,9 @@
-from re import T
-from typing import Iterator, List
-import os, sys
-import operator
+from typing import List
 from pprint import pprint, pformat
+from Lexer.ClassLexer import Lexer
 
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from Lexer.ClassToken import *
-from Lexer.ClassLexer import *
+from Lexer.ClassLexerOld import *
 from Parser.ClassNodes import *
 
 class Parser:
@@ -188,32 +185,11 @@ class Parser:
 
 if __name__ == '__main__':      
 
-    longstring = """
-    a is 5;
-    """
-
-    longstring2 = """
-    janee oneven(getal n);
-    janee even(getal n);
-
-    janee oneven(getal n) {
-        als (n gelijkaan 0){
-            geefterug onwaar;
-        }
-        geefterug even(n min 1);
-    }
-
-    janee even(getal n) {
-        als (n gelijkaan 0){
-            geefterug waar;
-        }
-        geefterug oneven(n min 1);
-    }
-    """
-
+    with open('dutchPlusPlusLoopig.txt', 'r') as file:
+        data = file.read()
   
-    token_list: List[Token] = get_token_list(longstring)
+    token_list: List[Token] = Lexer().get_token_list(data)
 
     a = Parser(token_list).parse(token_list)
 
-    # print(pformat(a.__str__()))
+    print(a)

@@ -15,6 +15,6 @@ janee even(getal n) {
     geefterug oneven(n min 1);
 }
 
-janee test is even(4);
+janee test is even(5);
 
-print(test)
+print(test);

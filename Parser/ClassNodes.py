@@ -1,7 +1,7 @@
 import operator
 from abc import ABC, abstractmethod
 from typing import Callable, List, Union
-from Interpreter.Lexer.ClassToken import Token, TokenData
+from Lexer.ClassToken import Token, TokenData
 from Runner.ClassLibrary import Library
 
 class Node(ABC):

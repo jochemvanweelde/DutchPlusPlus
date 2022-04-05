@@ -1,0 +1,5 @@
+getal test(getal n){
+    geefterug n;
+}
+
+print(test(5));

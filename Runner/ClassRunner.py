@@ -1,5 +1,9 @@
-from Interpreter.Parser.ClassParser import *
-from Interpreter.Parser.ClassNodes import *
+from typing import List
+
+from Lexer.ClassLexer import Lexer
+from Lexer.ClassToken import Token
+from Parser.ClassNodes import Node
+from Parser.ClassParser import Parser
 from Runner.ClassLibrary import Library
 
 # A function that gets an AST list of Nodes and runs them.
@@ -18,9 +22,11 @@ if __name__ == '__main__':
     with open('dutchPlusPlusLoopig.txt', 'r') as file:
         loopig_string = file.read()
 
-    token_list: List[Token] = get_token_list(recursive_string)
+    token_list: List[Token] = Lexer().get_token_list(loopig_string)
 
-    node_list = Parser(token_list).parse(token_list)
+    node_list, token_list = Parser().get_node_list(token_list)
 
     library_result = run_nodes(node_list)
+
+    print(library_result)
 

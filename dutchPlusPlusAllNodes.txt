@@ -1,0 +1,16 @@
+ValueNode: 5
+
+> VariableDeclationNode: getal a;
+> VariableDefinitionNode: getal a is 5;
+> VariableAssignmentNode: a is 5;
+> VariableCallNode: a;
+
+> FunctionDeclarationNode: getal a(getal b, getal c);
+> FunctionDefinitionNode: getal a(getal b, getal c){}
+> FunctionCallNode: a(VARIABLE_DECLARATION, VARIABLE_DECLARATION);
+
+> ExpressionNode: a isgroterofgelijkaan 5;
+> ConditionalNode: als(EXPRESSION_NODE){}
+> ReturnNode: geefterug NODE;
+> WhileNode: terwijl(EXPRESSION_NODE){}
+> PrintNode: print(NODE);

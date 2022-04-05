@@ -1,15 +1,14 @@
 from typing import List
-from Interpreter.Lexer.ClassToken import Token, TokenData, TokenType
+from Lexer.ClassToken import Token, TokenData, TokenType
 from copy import copy
 import operator
 
-class Lexer:
+class LexerOld:
     def __init__(self, text: str) -> None:
         self.text = text
         self.pos = 0
         self.token_data = TokenData(1,1)
         self.current_token = None
-
 
     def error(self) -> Exception:
         '''Return basic Exception'''
@@ -149,21 +148,18 @@ class Lexer:
         raise Exception(f"(Illegal) Character '{current_char}' not recognised: " + current_token_data.__str__())
 
     def get_next_digit(self, text: str, pos: int) -> str:
-        '''add chars if next char is a digit or a dot (floats)'''
+        '''returns the next integer or float from text'''
         if not self.is_eof(text, pos) and (text[pos].isdigit() or text[pos] == '.'):
             return text[pos] + self.get_next_digit(text, pos+1)
         return ''
 
     def get_next_word(self, text: str, pos: int) -> str:
-        '''get the next word'''
+        '''returns the next word'''
         if not self.is_eof(text, pos) and text[pos].isalpha():
             return text[pos] + self.get_next_word(text, pos+1)
         return ''
 
 def get_token_list(data: str, debug : bool = False) -> List[Token]:
-    with open('dutchPlusPlus.txt', 'r') as file:
-        data = file.read()
-
     a = Lexer(data)
     current_tokens : List[TokenType] = []
     current_tokens.append(a.get_next_token())
