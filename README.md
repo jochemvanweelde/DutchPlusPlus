@@ -1,7 +1,7 @@
 # DutchPlusPlus
  Dutch++ is een programmeertaal die is ontworpen door Jochem van Weelde voor ATP, een vak van de Hogeschool Utrecht 
 
- De taal lijkt op C++ maar is compleet "vernederlandst" waardoor je de code bijna in het Nederlands voor kan lezen. De taal werkt echter niet zoals C++. Het kan beter vergeleken worden met Python met C++ verplichte typing en style. Op dit moment is alleen de basis geimplementeerd om goede (eenvoudige) programma's te kunnen schrijven. Hierondor kunt u lezen wat deze taal allemaal ondersteunt. 
+ De taal lijkt op C++ maar is compleet "vernederlandst" waardoor je de code bijna in het Nederlands voor kan lezen. De taal werkt echter niet zoals C++. Het kan beter vergeleken worden met Python met C++ verplichte typing en style. Op dit moment is alleen de basis geimplementeerd om goede (eenvoudige) programma's te kunnen schrijven. Hieronder kunt u lezen wat deze taal allemaal ondersteunt. 
 
 ## Eisen van ATP
 Het vak ATP heeft een paar eisen gesteld waaraan de taal maar ook de python-code waarmee de taal is geschreven, moet voldoen. Deze staan hieronder onder een apart kopje uitgelegd. 
@@ -19,7 +19,7 @@ Het volledige project is functioneel geschreven. Hoewel de Lexer, Parser en Runn
 Bijna alles in dit project is een klasse. Het beste gebruik van klasse en inheritance kan je zien in [ClassNodes.py](Parser\ClassNodes.py). Alle nodes erven van Node maar gebruiken ook elkaar. De abstract-functies `__repr__()` en `run()` moeten worden geimplementeerd door alle andere nodes.
 
 ### Decorators
-Ik heb nog geen goede use case gevonden voor decorators in mijn code. 
+Ik heb nog geen goede use case gevonden voor decorators in mijn code, maar ik heb wel een decorator geschreven om te laten zien dat ik het wel snap! Een decorator is geschreven in [ClassNodes.py](Parser/ClassNodes.py) voor debugging. Een simpele `@debug_decorator` boven een functie plaatsen is genoeg om te laten zien welke node wanneer wordt 'gerunned'.
 
 ### Type-annotaties
 Ook zijn type-annotaties zo volledig mogelijk ingezet in dit project. Type-annotaties maakt de pythoncode enorm veel duidelijker. Het is duidelijk wat een functie wil ontvangen en wat je daarvoor terugkrijgt. Daarnaast heb je een blije intellisense en daardoor dus ook een blije IT-er. 

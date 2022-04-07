@@ -1,7 +1,5 @@
-from dataclasses import dataclass
 from enum import Enum
-
-from typing import List
+from typing import NamedTuple
 
 #====ALL TOKENS====
 class TokenType(Enum):
@@ -60,16 +58,12 @@ class TokenType(Enum):
     DIGIT       = 'DIGIT'       # any digit
     EOF         = 'EVB'         # EOF
 
-@dataclass
-class TokenData:
+class TokenData(NamedTuple):
     line: int
     char: int
 
-@dataclass
-class Token:
+class Token(NamedTuple):
     type: TokenType
     value: any
     token_data: TokenData
-
-    
 

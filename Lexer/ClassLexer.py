@@ -1,4 +1,3 @@
-import copy
 from pprint import pprint
 from typing import List
 from Lexer.ClassToken import Token, TokenData, TokenType
@@ -9,19 +8,19 @@ class Lexer:
     '''Lexer class that translates a string into a list with tokens'''
     
     def get_next_digit(self, data: str) -> str:
-        '''returns the next integer or float from text'''
+        '''returns the next integer or float from a string'''
         if data != '' and (data[0].isdigit() or data[0] == '.'):
             return data[0] + self.get_next_digit(data[1:])
         return ''
 
     def get_next_word(self, data: str) -> str:
-        '''returns the next word'''
+        '''returns the next word from a string'''
         if data != '' and data[0].isalpha():
             return data[0] + self.get_next_word(data[1:])
         return ''
 
     def get_token_list(self, data: str, token_data: TokenData = TokenData(1,1)) -> List[Token]:
-        '''get the token list'''
+        '''get a list of tokens from a string. This string must follow the D++ syntax.'''
         result_token: Token = None
         result_string: str = None
         if data == "":
@@ -103,9 +102,8 @@ class Lexer:
         # then change the TokenData accordingly and call this function recursively with the next char
         elif data[0].isspace():
             if data[0] == '\n':
-                token_data.line += 1
-                token_data.char = 1
-            token_data.char += 1
+                token_data = TokenData(token_data.line + 1, 1)
+            token_data = TokenData(token_data.line, token_data.char + 1)
             return self.get_token_list(data[1:], token_data)
         
         # Check if first char in data is a special char and fill result_token with the corresponding TokenType
@@ -139,17 +137,13 @@ class Lexer:
 
         # First change token_data based on the result_string and then call this function recursively with the next char
         length_result_string = len(result_string)
-        new_token_data: TokenData = copy.copy(token_data)
-        new_token_data.char += length_result_string
+        new_token_data: TokenData = TokenData(token_data.line, token_data.char + length_result_string)
         return [result_token] + self.get_token_list(data[length_result_string:], new_token_data)
 
 if __name__ == '__main__':
     with open('dutchPlusPlusLoopig.txt', 'r') as file:
         data = file.read()
-    
-    lexer = Lexer()
-    token_list = lexer.get_token_list(data)
+
+    token_list = Lexer().get_token_list(data)
 
     pprint(token_list)
-
-        

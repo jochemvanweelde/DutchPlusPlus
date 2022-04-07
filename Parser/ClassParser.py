@@ -168,14 +168,8 @@ class Parser:
 if __name__ == '__main__':
     with open('dutchPlusPlusRecursive.txt', 'r') as file:
         data = file.read()
-
-    # data = """
-    # getal even(getal n, getal z);
-    # """
   
     token_list: List[Token] = Lexer().get_token_list(data)
-
-    # print(token_list)
 
     node_list, token_list = Parser().get_node_list(token_list)
 

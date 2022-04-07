@@ -1,6 +1,5 @@
 from typing import List
 
-
 class Library():
     def __init__(self) -> None:
         self.library: dict = {}
