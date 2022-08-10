@@ -8,6 +8,7 @@ import operator
 class Lexer:
     '''Lexer class that translates a string into a list with tokens'''
     
+    # get_next_digit :: str -> str
     def get_next_digit(self, data: str) -> str:
         """returns the next digit from a string
 
@@ -21,6 +22,7 @@ class Lexer:
             return data[0] + self.get_next_digit(data[1:])
         return ''
 
+    # get_next_word :: str -> str
     def get_next_word(self, data: str) -> str:
         """Returns the next word of a string
 
@@ -34,6 +36,7 @@ class Lexer:
             return data[0] + self.get_next_word(data[1:])
         return ''
 
+    # get_next_token :: str -> TokenData -> List[Token]
     def get_token_list(self, data: str, token_data: TokenData = TokenData(1,1)) -> List[Token]:
         """get a list of tokens from a string. This string must follow the D++ syntax.
 
@@ -76,8 +79,6 @@ class Lexer:
                     result_token = Token(TokenType.INT, int, token_data)
                 case TokenType.FLOAT.value:
                     result_token = Token(TokenType.FLOAT, float, token_data)
-                case TokenType.STRING.value:
-                    result_token = Token(TokenType.STRING, str, token_data)
                 case TokenType.TRUE.value:
                     result_token = Token(TokenType.TRUE, True, token_data)
                 case TokenType.FALSE.value:
@@ -124,7 +125,7 @@ class Lexer:
                     result_token = Token(TokenType.RETURN, result_string, token_data)
                 case _:    
                     result_token = Token(TokenType.VARIABLE, result_string, token_data)
-
+        
         # Check if first char in data is a space or a newline character
         # then change the TokenData accordingly and call this function recursively with the next char
         elif data[0].isspace():

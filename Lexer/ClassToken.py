@@ -7,7 +7,7 @@ class TokenType(Enum):
     BOOL      = 'janee'           # bool
     INT       = 'getal'           # int
     FLOAT     = 'zweef'           # float
-    STRING    = 'woord'           # string
+    # STRING    = 'woord'           # string
 
     #Constants Tokens
     TRUE    = 'waar'    # true

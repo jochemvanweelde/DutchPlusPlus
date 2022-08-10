@@ -15,7 +15,7 @@ class bcolors:
     BOLD = '\033[1m'
     UNDERLINE = '\033[4m'
 
-# Debug Decorator for nodes
+# debug_decorator :: Callable -> Callable
 def debug_decorator(func: Callable) -> Callable:
     """A debug decorator for the Run function of all nodes. This helps the user to see what node is running in what order.
 
@@ -49,6 +49,7 @@ class Node(ABC):
     def __repr__(self) -> str:
         return super().__repr__()
 
+    # run :: Library -> None
     @abstractmethod
     def run(self, library: Library) -> None:
         """Runs the node and excecute/run nested nodes

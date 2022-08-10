@@ -10,13 +10,24 @@ from Parser.ClassNodes import *
 class Parser:
     """This Parser class is responsible to check all Tokens and convert them to a nested Nodes tree
     """
+    # get_paramenter_list :: List[Token] -> Tuple[List[VariableDeclarationNode], List[Token]]
     def get_parameters(self, token_list: List[Token]) -> Tuple[List[VariableDeclarationNode], List[Token]]:
-        # Returns a list of VariableDeclarationNodes and a list of Tokens
+        """# Returns a list of VariableDeclarationNodes and a list of Tokens
+
+        Args:
+            token_list (List[Token]): A tokenlist from the Lexer
+
+        Raises:
+            Exception: No Variable Type
+
+        Returns:
+            Tuple[List[VariableDeclarationNode], List[Token]]: Returns a list with VariableDeclarationNodes (paramters) and the rest of the TokenList.
+        """
         result_node: VariableDeclarationNode = None
         result_node_list: List[VariableDeclarationNode] = []
         if token_list[0].type == TokenType.RIGHTROUNDBRACKET:
             return [], token_list
-        elif token_list[0].type in [TokenType.BOOL, TokenType.INT, TokenType.FLOAT, TokenType.STRING]:
+        elif token_list[0].type in [TokenType.BOOL, TokenType.INT, TokenType.FLOAT]:
             variable_type: type = token_list.pop(0).value
             variable_name: str = token_list.pop(0).value
             if token_list[0].type == TokenType.COMMA: token_list.pop(0) # Remove TokenType.COMMA if it exists
@@ -26,8 +37,16 @@ class Parser:
             raise Exception("Expected variable type")
         return [result_node] + result_node_list, token_list
 
+    # get_next_node :: List[Token] -> Tuple[List[Node], List[Token]]
     def get_call_parameters(self, token_list: List[Token]) -> Tuple[List[Node], List[Token]]:
-        # Returns a list of Nodes for the FunctionCallNode and a list of Tokens
+        """Returns a list of Nodes for the FunctionCallNode and a list of Tokens
+
+        Args:
+            token_list (List[Token]): The TokenList from the Lexer
+
+        Returns:
+            Tuple[List[Node], List[Token]]: Returns a list of Nodes and a list of the unused Tokens
+        """
         result_node: Node = None
         result_node_list: List[Node] = []
 
@@ -38,8 +57,19 @@ class Parser:
             result_node_list, token_list = self.get_call_parameters(token_list)
             return [result_node] + result_node_list, token_list
         
-
+    # get_next_node :: List[Token] -> Tuple[Node, List[Token]]
     def get_next_node(self, token_list: List[Token]) -> Tuple[Node, List[Token]]:
+        """Finds the next node in a TokenList and returns it
+
+        Args:
+            token_list (List[Token]): Tokenlist from Lexer
+
+        Raises:
+            Exception: No variable name
+
+        Returns:
+            Tuple[Node, List[Token]]: The found Node and a List of unused Tokens
+        """
         result_node: Node = None
         # Check if token_list is empty. If so, return empty list
         if len(token_list) == 0:
@@ -53,8 +83,8 @@ class Parser:
         elif token_list[0].type in [TokenType.DIGIT, TokenType.TRUE, TokenType.FALSE]:
             result_node = ValueNode(token_list.pop(0).value)
 
-        # Check if first token is a BOOL, INT, FLOAT or STRING
-        elif token_list[0].type in [TokenType.BOOL, TokenType.INT, TokenType.FLOAT, TokenType.STRING]:
+        # Check if first token is a BOOL, INT, FLOAT
+        elif token_list[0].type in [TokenType.BOOL, TokenType.INT, TokenType.FLOAT]:
             if token_list[1].type != TokenType.VARIABLE:
                 raise Exception("Expected a variable name after the type")
             elif token_list[2].type == TokenType.SEMICOLON:
@@ -153,10 +183,17 @@ class Parser:
 
         return result_node, token_list
 
-    # Get node list from a token list
-    # This recursive function ends when the first token is EOF or a RIGHTCURLYBRACKET
-    # Returns a list of Nodes and the token_list
+    # get_node_list :: [Token] -> Tuple[List[Node], List[Token]]
     def get_node_list(self, token_list: List[Token]) -> Tuple[List[Node], List[Token]]:
+        """Gets a list of nodes from a token list.
+        This functions ends when a EOF or RIGHTCURLYBRACKET token is found
+
+        Args:
+            token_list (List[Token]): List of tokens from Lexer
+
+        Returns:
+            Tuple[List[Node], List[Token]]: Returns a list of nodes found and a list of unused tokens.
+        """
         result_node: Node = None
         result_node_list: List[Node] = []
 
