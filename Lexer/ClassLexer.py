@@ -1,4 +1,5 @@
 from pprint import pprint
+from pydoc import doc
 from typing import List
 from Lexer.ClassToken import Token, TokenData, TokenType
 import operator
@@ -8,19 +9,45 @@ class Lexer:
     '''Lexer class that translates a string into a list with tokens'''
     
     def get_next_digit(self, data: str) -> str:
-        '''returns the next integer or float from a string'''
+        """returns the next digit from a string
+
+        Args:
+            data (str): A random string
+
+        Returns:
+            str: the next full digit or decimal number
+        """
         if data != '' and (data[0].isdigit() or data[0] == '.'):
             return data[0] + self.get_next_digit(data[1:])
         return ''
 
     def get_next_word(self, data: str) -> str:
-        '''returns the next word from a string'''
+        """Returns the next word of a string
+
+        Args:
+            data (str): A random string
+
+        Returns:
+            str: The next word in the given string
+        """
         if data != '' and data[0].isalpha():
             return data[0] + self.get_next_word(data[1:])
         return ''
 
     def get_token_list(self, data: str, token_data: TokenData = TokenData(1,1)) -> List[Token]:
-        '''get a list of tokens from a string. This string must follow the D++ syntax.'''
+        """get a list of tokens from a string. This string must follow the D++ syntax.
+
+        Args:
+            data (str): A string following the D++ syntax, commonly converted from a txt file
+            token_data (TokenData, optional): The line and character of the token. Defaults to TokenData(1,1).
+
+        Raises:
+            Exception: Illegal Character
+            Exception: Invalid or no Existing Token
+
+        Returns:
+            List[Token]: A list of tokens in the string
+        """
         result_token: Token = None
         result_string: str = None
         if data == "":

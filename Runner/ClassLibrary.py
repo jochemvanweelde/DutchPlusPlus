@@ -49,18 +49,20 @@ class Library():
 
     def get_value(self, key: str):
         '''gets a value from library with a key and value'''
-        if self.location[-1] == "":
+        # If the key exists in the current location
+        if self.location[-1] != "": 
+            return self.library[self.location[-1]][key]
+        # If the key exists in the global library
+        elif self.key_exists(key):
             return self.library[key]
-        # if key cannot be found on location try to find it on the global library
-        if not key in self.library[self.location[-1]]:
-            return self.library[key]
-        return self.library[self.location[-1]][key]
+        else:
+            raise KeyError(f"Key {key} does not exist in library")
 
     def key_exists(self, key: str):
-        '''checks if a key exists in library with a location and a key'''
-        if self.location[-1] == "":
-            return key in self.library
-        return key in self.library[self.location[-1]]
+        '''checks if a key exists in library with a location and a key or in the global library'''
+        if self.location[-1] != "":
+            return key in self.library[self.location[-1]] or key in self.library
+        return key in self.library
 
 
 if __name__ == '__main__':

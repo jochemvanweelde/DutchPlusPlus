@@ -8,6 +8,8 @@ from Parser.ClassNodes import *
 
 
 class Parser:
+    """This Parser class is responsible to check all Tokens and convert them to a nested Nodes tree
+    """
     def get_parameters(self, token_list: List[Token]) -> Tuple[List[VariableDeclarationNode], List[Token]]:
         # Returns a list of VariableDeclarationNodes and a list of Tokens
         result_node: VariableDeclarationNode = None

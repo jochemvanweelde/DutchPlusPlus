@@ -2,17 +2,42 @@ from abc import ABC, abstractmethod
 from typing import Callable, List, Tuple, Union
 from Runner.ClassLibrary import Library
 
+NODES_DEBUG = False
+
+class bcolors:
+    HEADER = '\033[95m'
+    OKBLUE = '\033[94m'
+    OKCYAN = '\033[96m'
+    OKGREEN = '\033[92m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
+
 # Debug Decorator for nodes
 def debug_decorator(func: Callable) -> Callable:
-    def wrapper(*args, **kwargs):
-        print(f"Running node: {args[0]}")
-        return func(*args, **kwargs)
-    return wrapper
+    """A debug decorator for the Run function of all nodes. This helps the user to see what node is running in what order.
 
-Value = Union[int, float, bool, str]
+    Args:
+        func (Callable): The run function of a Node
+
+    Returns:
+        Callable: Returns the run function of a Node or the wrapper inside this function
+    """
+    def wrapper(*args, **kwargs):
+        print(f"{bcolors.OKGREEN}Running node:{bcolors.ENDC} {args[0]}")
+        return func(*args, **kwargs)
+    if NODES_DEBUG:
+        return wrapper
+    return func
 
 class Node(ABC):
-    '''Abstract class for all nodes in the AST.'''
+    """Abstract class for all nodes in the AST.
+
+    Args:
+        ABC (_type_): Asbsract class inheritance
+    """
 
     def __init__(self) -> None:
         super().__init__()
@@ -26,7 +51,11 @@ class Node(ABC):
 
     @abstractmethod
     def run(self, library: Library) -> None:
-        '''Runs the node and optionally returns a function or a value.'''
+        """Runs the node and excecute/run nested nodes
+
+        Args:
+            library (Library): The library for variable and function storage
+        """
         return
 
 class ValueNode(Node):
@@ -50,6 +79,7 @@ class VariableDeclarationNode(Node):
     def __repr__(self) -> str:
         return f"VariableDeclationNode(return_type: {self.return_type}, name: {self.name})"
 
+    @debug_decorator
     def run(self, library: Library):
         if library.key_exists(self.name):
             raise Exception(f"Variable {self.name} declared somewhere else.")
@@ -62,12 +92,14 @@ class VariableDefinitionNode(Node):
         self.name = name
         self.value = value
 
-        if type(self.value) != self.return_type:
-            raise Exception(f"Variable {self.name} is not of type {self.return_type}.")
+        # TODO: Check if the value is of the correct type
+        # if type(self.value) != self.return_type:
+        #     raise Exception(f"Variable {self.name} is not of type {self.return_type}.\n Value is of type {type(self.value)}")
 
     def __repr__(self) -> str:
         return f"VariableDefinitionNode(return_type: {self.return_type}, name: {self.name}, value: {self.value})"
 
+    @debug_decorator
     def run(self, library: Library):
         # if library.key_exists(self.name):
         #     #TODO: Error when value is declared but not with same type
@@ -84,11 +116,13 @@ class VariableAssignmentNode(Node):
     def __repr__(self) -> str:
         return f"VariableAssignmentNode(name: {self.name}, value: {self.value})"
 
+    @debug_decorator
     def run(self, library: Library):
         if not library.key_exists(self.name):
             raise Exception(f"Variable {self.name} is not declared.")
-        if type(library[self.name]) is not type(self.value):
-            raise Exception(f"Variable {self.name} is not of type {type(self.value)}.")
+        # TODO: Check if the value is of the correct type
+        # if type(library[self.name]) is not type(self.value):
+        #     raise Exception(f"Variable {self.name} is not of type {type(self.value)}.")
         library[self.name] = self.value.run(library)
     
 class VariableCallNode(Node):
@@ -99,6 +133,7 @@ class VariableCallNode(Node):
     def __repr__(self) -> str:
         return f"VariableCallNode(name: {self.name})"
 
+    @debug_decorator
     def run(self, library: Library):
         if not self.name in library:
             raise Exception(f"Variable {self.name} is not declared.")
@@ -114,13 +149,12 @@ class FunctionDeclarationNode(Node):
     def __repr__(self) -> str:
         return f"FunctionDeclarationNode(name: {self.name}, return_type: {self.return_type}, parameters: {self.parameters})"
 
+    @debug_decorator
     def run(self, library: Library):
         library.set_location(self.name) # Set the location of the library to the function
         library['__return_type__'] = self.return_type # Set the return type of the function
         library['__parameters__'] = self.parameters # Set the parameter nodes of the function
-        list(map(lambda x: library.set_value(x.name, x.run(library)), self.parameters)) # Fill the library with the parameters.
         library.pop_location() # Remove the location of the library to the function
-
 
 class FunctionDefinitionNode(Node):
     '''Class for function definitions in the code'''
@@ -133,7 +167,10 @@ class FunctionDefinitionNode(Node):
     def __repr__(self) -> str:
         return f"FunctionDefinitionNode(name: {self.name}, return_type: {self.return_type}, parameters: {self.parameters}, body: {self.body})"
 
+    @debug_decorator
     def run(self, library: Library):
+        # TODO: Check if the function is already defined
+        
         library.set_location(self.name) # Set the location of the library to the function
         library['__return_type__'] = self.return_type # Set the return type of the function
         library['__parameters__'] = self.parameters # Set the parameter nodes of the function
@@ -161,8 +198,9 @@ class FunctionCallNode(Node):
             return return_value
         return self.run_body(body[1:], library) # Otherwise, run the next line of the body
 
+    @debug_decorator
     def run(self, library: Library):
-        if not self.name in library:
+        if not library.key_exists(self.name):
             raise Exception(f"Function {self.name} is not declared.")
         
         # Get the value of every parameter in this function call
@@ -194,6 +232,7 @@ class ExpressionNode(Node):
     def __repr__(self) -> str:
         return f"ExpressionNode(lhs: {self.lhs}, expression_type: {self.expression_type}, rhs: {self.rhs})"
 
+    @debug_decorator
     def run(self, library: Library):
         return self.expression_type(self.lhs.run(library), self.rhs.run(library)) # Run the expression
 
@@ -206,6 +245,7 @@ class ConditionalNode(Node):
     def __repr__(self) -> str:
         return f"ConditionalNode(expression: {self.expression}, body: {self.body})"
 
+    @debug_decorator
     def run(self, library: Library):
         if self.expression.run(library): # If the expression is true
             list(map(lambda x: x.run(library), self.body)) # Run the body
@@ -218,6 +258,7 @@ class ReturnNode(Node):
     def __repr__(self) -> str:
         return f"ReturnNode(value: {self.value})"
 
+    @debug_decorator
     def run(self, library: Library):
         if not '__return_type__' in library:
             pass
@@ -234,6 +275,7 @@ class WhileNode(Node):
     def __repr__(self) -> str:
         return f"WhileNode(expression: {self.expression}, body: {self.body})"
 
+    @debug_decorator
     def run(self, library: Library):
         if self.expression.run(library): # If the expression is true
             list(map(lambda x: x.run(library), self.body)) # Run the body
@@ -247,5 +289,6 @@ class PrintNode(Node):
     def __repr__(self) -> str:
         return f"PrintNode(value: {self.value})"
 
+    @debug_decorator
     def run(self, library: Library):
         print(self.value.run(library)) # Print the value
