@@ -18,5 +18,3 @@ janee even(getal n) {
 janee isVierOneven is oneven(4);
 
 print(isVierOneven);
-print(even(4));
-print(5 delendoor 2);

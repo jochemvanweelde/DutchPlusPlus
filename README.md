@@ -34,18 +34,18 @@ In dit onderdeel worden verschillende functies van DutchPlusPlus uitgelegd en ge
 Variabelen kunnen gedeclareerd, gedefiniëerd, ge-assigned en gecalled worden. De werking hiervan lijkt op die van C++. 
 ```bash
 # Declaration + Definition
-janee boolean;
-janee boolean is waar;
+janee a;
+janee b is waar;
 
 # Definition
-getal integer is 5;
+getal c is 5;
 
 # Reassign
-zweef float is 4.5;
-float is 5.6;
+zweef d is 4.5;
+d is 5.6;
 
 # Call
-getal ookInteger is integer;
+getal ookInteger is c;
 ```
 
 ### Functies
@@ -152,3 +152,9 @@ print(3 plus 2);
 print(geefGetal(a) gelijkaan 2 plus 3);
 ```
 Je zult vast wel denken waarom er opeens print() wordt gebruikt in plaats van de klassieke c++ `std::cout <<`. Op dit moment is de python print overgenomen voor gemakkelijkheid. Wie weet heb ik later tijd om dit nog te veranderen naar een leuke Nederlandse variant. 
+
+## Filmpjes
+Hieronder staan een paar filmpjes van de opdracht. Klik op de thumbnail om de video te bekijken op YouTube.  
+
+### Filmpje Interpreter
+[![Youtube Interpreter Filmpje](https://img.youtube.com/vi/KjqywITCSgE/0.jpg)](https://www.youtube.com/watch?v=KjqywITCSgE)
