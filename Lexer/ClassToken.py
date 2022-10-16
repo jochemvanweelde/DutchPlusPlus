@@ -51,7 +51,7 @@ class TokenType(Enum):
     IF          = 'als'         # if
     ELSEIF      = 'andersals'   # else if
     ELSE        = 'anders'      # else
-    WHILE       = 'terwijl'     # while
+    WHILE       = 'zolang'     # while
     PRINT       = 'print'       # cout <<
     RETURN      = 'geefterug'   # return
     VARIABLE    = 'VARIABLE'    # name of variable

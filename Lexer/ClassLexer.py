@@ -1,5 +1,4 @@
 from pprint import pprint
-from pydoc import doc
 from typing import List, Tuple
 from Lexer.ClassToken import Token, TokenData, TokenType
 import operator

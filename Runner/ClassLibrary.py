@@ -34,13 +34,13 @@ class Library():
             return self.library.pop(key)
         return self.library[self.location[-1]].pop(key)
 
-    # pop_location :: None -> None
-    def pop_location(self):
+    # pop_location :: None -> str
+    def pop_location(self) -> str:
         '''removes the last location from the location list thus going back one location'''
-        self.location.pop()
+        return self.location.pop()
 
-    # get_location :: None -> None
-    def get_location(self):
+    # get_location :: None -> str
+    def get_location(self) -> str:
         '''returns the current location'''
         return self.location[-1]
 
@@ -70,12 +70,3 @@ class Library():
         if self.location[-1] != "":
             return key in self.library[self.location[-1]] or key in self.library
         return key in self.library
-
-
-if __name__ == '__main__':
-    z = Library()
-    z.set_value("test", {})
-    z.set_location("test")
-    z.set_value("test", 2)
-    z.set_location("")
-    print(z["test"]["test"])

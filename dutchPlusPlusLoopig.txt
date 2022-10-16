@@ -1,6 +1,6 @@
 getal sommig(getal n){
     getal resultaat is 0;
-    terwijl(n groterofgelijkaan 1){
+    zolang(n groterofgelijkaan 1){
         resultaat is resultaat plus n;
         n is n min 1;
     }

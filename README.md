@@ -27,7 +27,7 @@ Ook zijn type-annotaties zo volledig mogelijk ingezet in dit project. Type-annot
 ### Hogere Ordefuncties
 Hogere ordefuncties zijn her en der gebruikt in dit project. De meeste kun je vinden in [ClassNodes.py](Parser/ClassNodes.py). Hierin wordt `zip()` en `map()` gebruikt om functies aan te roepen van parameters of nodes van functiebodies bijvoorbeeld.
 
-## Funcites van DutchPlusPlus
+## Functies van DutchPlusPlus
 In dit onderdeel worden verschillende functies van DutchPlusPlus uitgelegd en gedemonstreerd via codevoorbeelden. 
 
 ### Variabelen
@@ -119,9 +119,9 @@ als (n gelijkaan 0){
 Het gebruik van `alsanders` en `anders` wordt nog niet ondersteund. 
 
 ### Loopjes
-Alleen een `terwijl` statement kan gemaakt worden in DutchPlusPlus. Dit lijkt op een while-loop in c++.
+Alleen een `zolang` statement kan gemaakt worden in DutchPlusPlus. Dit lijkt op een while-loop in c++.
 ```bash
-terwijl (n groterdan 0){
+zolang (n groterdan 0){
     n is n min 1;
 }
 ```
@@ -153,8 +153,42 @@ print(geefGetal(a) gelijkaan 2 plus 3);
 ```
 Je zult vast wel denken waarom er opeens print() wordt gebruikt in plaats van de klassieke c++ `std::cout <<`. Op dit moment is de python print overgenomen voor gemakkelijkheid. Wie weet heb ik later tijd om dit nog te veranderen naar een leuke Nederlandse variant. 
 
+## Unit Testing
+Unit tests zijn beschikbaar in dit project. Deze unit tests testen iedere functie en klasse van dit project.
+UnitTests zijn te vinden in het mapje [UnitTests](UnitTests) en bevatten de volgende onderdelen:
+* [Unittests voor de Lexer](UnitTests/UnitTestsLexer.py)
+* [Unittests voor de Parser](UnitTests/UnitTestsParser.py)
+* [Unittests voor de Runner](UnitTests/UnitTestsRunner.py)
+
+### Unittests voor de Lexer
+De Lexer vormt de basis voor alle functionaliteiten later in een taal. Deze moet dus goede, gedetailleerde tests hebben. 
+
+De klasse **TestLexer** bevat tests voor iedere functie van de Lexer en test de preciese werking van die functies. De tests gaan uit van een goed geformateerde D++ string. Er wordt ook getest als er een invalide token wordt gegeven zoals het `=`-teken. 
+
+De klasse **TestToken** bevat alle tests voor iedere token binnen D++. De tests kijken naar of een goed geformatteerde string correct wordt omgezet naar de juiste token en dat de token de juiste values bevatten.
+Daarnaast wordt ook TokenData meegenomen in deze tests om te kijken of de TokenData klasse correct wordt geüpdatet.
+
+### Unittests voor de Parser
+De parser maakt van een super lange tokenlijst een georganiseerde boomstructuur (AST) van nodes.  
+
+De klasse **TestParser** bevat alle tests voor iedere functie van de Parser en test de preciese werking van die functies. Zo wordt er gekeken of de juiste nodes worden gegenereerd op basis van een lijst aan tokens. Er wordt gekeken of de nodes de goede inhoud hebben en of de volgorde van de nodes goed wordt gegenereerd.   
+
+De klasse **TestNodes** zorgt voor de preciese werking van alle Nodes die bestaan in D++. Ze testen iedere node die uit een string wordt gegenereerd. Deze tests zijn dus afhankelijk van de tests die worden gedaan in de **TestToken** en **TestLexer** klassen omdat ze de lexer gebruiken om tokens te genereren.  
+
+Binnen deze tests wordt er gekeken naar de membervariabelen van iedere node en wordt er gekeken of daarbinnen de correcte waardes zijn gegenereerd. Hierdoor wordt er niet alleen gekeken naar OF de goede node wordt gegeneerd maar ook of de node correct zijn nested children goed heeft gegenereerd.  
+
+### Unittests voor de Runner
+Uiteindelijk nog wat tests voor de Runner en de library die wordt gebruikt om alle variabelen en functies op te slaan. 
+
+De klasse **TestPrograms** test een geschreven DutchPlusPlus programma met een gelijk programma in python en kijkt of het resultaat hetzelfde is. Dit is wellicht één van de allerbelangrijkste tests binnen dit programma. Het test namelijk de complete functionaliteit binnen de zelfgeschreven taal die vergelijkt wordt met een veelgebruikte populaire taal. Door de programma's met verschillende waardes te laten runnen kunnen we met zekerheid zeggen dat de werking van de taal goed is als deze overeenkomt met die van Python.   
+
+De klasse **TestLibrary** is een kleine reeks aan testen die de werking controleert van de Library functies. De tests checken of de location_list en de dictionary goed worden bijgehouden tijdens het runnen.   
+
 ## Filmpjes
-Hieronder staan een paar filmpjes van de opdracht. Klik op de thumbnail om de video te bekijken op YouTube.  
+Hieronder staan een paar filmpjes van de opdracht. Klik op de thumbnail om de video te bekijken op YouTube.    
+
+❗LET OP! Dit filmpje is verouderd. De werking en structuur van dit project kan verschillen.❗  
 
 ### Filmpje Interpreter
+25 augustus 2022  
 [![Youtube Interpreter Filmpje](https://img.youtube.com/vi/KjqywITCSgE/0.jpg)](https://www.youtube.com/watch?v=KjqywITCSgE)

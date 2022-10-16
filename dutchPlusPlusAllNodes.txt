@@ -12,5 +12,5 @@ ValueNode: 5
 > ExpressionNode: a isgroterofgelijkaan 5;
 > ConditionalNode: als(EXPRESSION_NODE){}
 > ReturnNode: geefterug NODE;
-> WhileNode: terwijl(EXPRESSION_NODE){}
+> WhileNode: zolang(EXPRESSION_NODE){}
 > PrintNode: print(NODE);

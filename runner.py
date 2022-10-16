@@ -23,8 +23,8 @@ if __name__ == '__main__':
     with open('dutchPlusPlusTest.txt', 'r') as file:
         test_string = file.read()
 
-    token_list: List[Token] = Lexer().get_token_list(recursive_string)
-    # token_list: List[Token] = Lexer().get_token_list(loopig_string)
+    # token_list: List[Token] = Lexer().get_token_list(recursive_string)
+    token_list: List[Token] = Lexer().get_token_list(loopig_string)
 
     node_list, token_list = Parser().get_node_list(token_list)
 

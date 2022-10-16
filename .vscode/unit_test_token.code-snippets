@@ -1,0 +1,33 @@
+{
+	// Place your DutchPlusPlus workspace snippets here. Each snippet is defined under a snippet name and has a scope, prefix, body and 
+	// description. Add comma separated ids of the languages where the snippet is applicable in the scope field. If scope 
+	// is left empty or omitted, the snippet gets applied to all languages. The prefix is what is 
+	// used to trigger the snippet and the body will be expanded and inserted. Possible variables are: 
+	// $1, $2 for tab stops, $0 for the final cursor position, and ${1:label}, ${2:another} for placeholders. 
+	// Placeholders with the same ids are connected.
+	// Example:
+	// "Print to console": {
+	// 	"scope": "javascript,typescript",
+	// 	"prefix": "log",
+	// 	"body": [
+	// 		"console.log('$1');",
+	// 		"$2"
+	// 	],
+	// 	"description": "Log output to console"
+	// }
+	"unit_test_token": {
+		"scope": "python",
+		"prefix": "unit_test_token",
+		"body": [
+			"def test_token_$1(self): ",
+			"   token_string = \"$2\"",
+			"   data_str, token_data, token = Lexer().get_token(token_string)",
+			"   self.assertEqual(token.type, TokenType.$3, \"The token should be a $3 Tokentype\")",
+			"   self.assertEqual(data_str, \"\", \"The data string should be empty\")",
+			"   self.assertEqual(token_data, TokenData(1,$5), \"getal is $4 characters long so the token data should be 1,$5\")",
+			"$0"
+    
+		],
+		"description": "Unit test token"
+	}
+}

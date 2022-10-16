@@ -12,7 +12,7 @@ class Parser:
     """
     # get_paramenter_list :: List[Token] -> Tuple[List[VariableDeclarationNode], List[Token]]
     def get_parameters(self, token_list: List[Token]) -> Tuple[List[VariableDeclarationNode], List[Token]]:
-        """# Returns a list of VariableDeclarationNodes and a list of Tokens
+        """Returns a list of VariableDeclarationNodes and a list of Tokens
 
         Args:
             token_list (List[Token]): A tokenlist from the Lexer
@@ -53,6 +53,7 @@ class Parser:
         if token_list[0].type == TokenType.RIGHTROUNDBRACKET:
             return [], token_list
         else:
+            if token_list[0].type == TokenType.COMMA: token_list.pop(0) # Remove TokenType.COMMA if it exists
             result_node, token_list = self.get_next_node(token_list)
             result_node_list, token_list = self.get_call_parameters(token_list)
             return [result_node] + result_node_list, token_list
