@@ -1,6 +1,6 @@
 from pprint import pprint
 from pydoc import doc
-from typing import List
+from typing import List, Tuple
 from Lexer.ClassToken import Token, TokenData, TokenType
 import operator
 
@@ -36,9 +36,9 @@ class Lexer:
             return data[0] + self.get_next_word(data[1:])
         return ''
 
-    # get_next_token :: str -> TokenData -> List[Token]
-    def get_token_list(self, data: str, token_data: TokenData = TokenData(1,1)) -> List[Token]:
-        """get a list of tokens from a string. This string must follow the D++ syntax.
+    # get_token :: str -> TokenData -> Tuple[str, TokenData, Token]
+    def get_token(self, data: str, token_data: TokenData = TokenData(1,1)) -> Tuple[str, TokenData, Token]:
+        """Get the next token of a string. This string must follow the D++ syntax.
 
         Args:
             data (str): A string following the D++ syntax, commonly converted from a txt file
@@ -49,13 +49,14 @@ class Lexer:
             Exception: Invalid or no Existing Token
 
         Returns:
-            List[Token]: A list of tokens in the string
+            str: The data string without the token
+            Token: The found token
         """
         result_token: Token = None
         result_string: str = None
         if data == "":
             result_token = Token(TokenType.EOF, result_string, token_data)
-            return [result_token]
+            return data, token_data, result_token
 
         # Check if first char in data is a digit and get the full digit string
         # then check if the digit string is an integer or float and fill result_token with the corresponding TokenType
@@ -132,7 +133,7 @@ class Lexer:
             if data[0] == '\n':
                 token_data = TokenData(token_data.line + 1, 1)
             token_data = TokenData(token_data.line, token_data.char + 1)
-            return self.get_token_list(data[1:], token_data)
+            return self.get_token(data[1:], token_data)
         
         # Check if first char in data is a special char and fill result_token with the corresponding TokenType
         else:
@@ -161,12 +162,29 @@ class Lexer:
         
         # Check if result_string or result_token is None, then give an error message
         if result_string is None or result_token is None:
-            raise Exception('Error: Invalid token')
+            raise Exception('Error: Invalid token', data[0], token_data, data)
 
         # First change token_data based on the result_string and then call this function recursively with the next char
         length_result_string = len(result_string)
         new_token_data: TokenData = TokenData(token_data.line, token_data.char + length_result_string)
-        return [result_token] + self.get_token_list(data[length_result_string:], new_token_data)
+        return data[length_result_string:], new_token_data, result_token
+    
+    # get_token_list :: str -> TokenData -> List[Token]
+    def get_token_list(self, data: str, token_data: TokenData = TokenData(1,1)) -> list[Token]:
+        """Get a list of tokens based on a string. This string must follow the D++ syntax.
+
+        Args:
+            data (str): A string following the D++ syntax, commonly converted from a txt file
+            token_data (TokenData, optional): The line and character of the token. Defaults to TokenData(1,1).
+
+        Returns:
+            List[Token]: The found tokens
+        """
+        data, token_data, token = self.get_token(data, token_data)
+        if token.type == TokenType.EOF:
+            return [token]
+        return [token] + self.get_token_list(data, token_data)
+        
 
 if __name__ == '__main__':
     with open('dutchPlusPlusLoopig.txt', 'r') as file:
