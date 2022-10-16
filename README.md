@@ -3,6 +3,24 @@
 
  De taal lijkt op C++ maar is compleet "vernederlandst" waardoor je de code bijna in het Nederlands voor kan lezen. De taal werkt echter niet zoals C++. Het kan beter vergeleken worden met Python met C++ verplichte typing en style. Op dit moment is alleen de basis geimplementeerd om goede (eenvoudige) programma's te kunnen schrijven. Hieronder kunt u lezen wat deze taal allemaal ondersteunt. 
 
+ ## DutchPlusPlus Runnen
+❗Let op! Dit programma vereist python 3.10
+
+ Voer de volgende commando's uit om DutchPlusPlus te runnen.
+ ```bash
+git clone https://github.com/jochemvanweelde/DutchPlusPlus.git
+cd DutchPlusPlus
+python runner.py dutchPlusPlusLoopig.txt
+
+OR
+
+python runner.py [file]
+ ```
+
+Voer unittests uit met
+```bash
+python tests.py
+```
 ## Eisen van ATP
 Het vak ATP heeft een paar eisen gesteld waaraan de taal maar ook de python-code waarmee de taal is geschreven, moet voldoen. Deze staan hieronder onder een apart kopje uitgelegd. 
 
