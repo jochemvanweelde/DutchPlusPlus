@@ -161,11 +161,11 @@ UnitTests zijn te vinden in het mapje [UnitTests](UnitTests) en bevatten de volg
 * [Unittests voor de Runner](UnitTests/UnitTestsRunner.py)
 
 ### Unittests voor de Lexer
-De Lexer vormt de basis voor alle functionaliteiten later in een taal. Deze moet dus goede, gedetailleerde tests hebben. 
+De Lexer vormt de basis voor alle functionaliteiten in deze taal. Er moeten dus goede tests zijn om de werking hier van te garanderen.
 
-De klasse **TestLexer** bevat tests voor iedere functie van de Lexer en test de preciese werking van die functies. De tests gaan uit van een goed geformateerde D++ string. Er wordt ook getest als er een invalide token wordt gegeven zoals het `=`-teken. 
+De klasse **TestLexer** bevat tests voor iedere functie van de Lexer en test de preciese werking van die functies. De tests gaan uit van een goed geformateerde D++ string. Invalide tokens worden ook getest, er wordt dus gecontroleerd voor een error, bijvoorbeeld als er een `=`-teken wordt meegegeven. Door deze tests kunnen we garanderen dat een string goed geconverteerd kan worden naar een lijst aan tokens.
 
-De klasse **TestToken** bevat alle tests voor iedere token binnen D++. De tests kijken naar of een goed geformatteerde string correct wordt omgezet naar de juiste token en dat de token de juiste values bevatten.
+De klasse **TestToken** bevat alle tests voor iedere token binnen D++. De tests controleren of een bepaalde string (met D++ formatering) goed wordt omgezet naar een token. Deze tests controleren ook of de inhoud van de token goed klopt zodat er gegarandeerd kan worden dat de juiste waardes binnen de juiste type tokens worden gezet.
 Daarnaast wordt ook TokenData meegenomen in deze tests om te kijken of de TokenData klasse correct wordt geüpdatet.
 
 ### Unittests voor de Parser
@@ -175,19 +175,19 @@ De klasse **TestParser** bevat alle tests voor iedere functie van de Parser en t
 
 De klasse **TestNodes** zorgt voor de preciese werking van alle Nodes die bestaan in D++. Ze testen iedere node die uit een string wordt gegenereerd. Deze tests zijn dus afhankelijk van de tests die worden gedaan in de **TestToken** en **TestLexer** klassen omdat ze de lexer gebruiken om tokens te genereren.  
 
-Binnen deze tests wordt er gekeken naar de membervariabelen van iedere node en wordt er gekeken of daarbinnen de correcte waardes zijn gegenereerd. Hierdoor wordt er niet alleen gekeken naar OF de goede node wordt gegeneerd maar ook of de node correct zijn nested children goed heeft gegenereerd.  
+Binnen deze tests wordt er gekeken naar de membervariabelen van iedere node en wordt er gekeken of daarbinnen de correcte waardes zijn gegenereerd. Hierdoor wordt er niet alleen gekeken het type van de gegenereerde node maar ook of de node correct zijn nested children goed heeft gegenereerd. Hierdoor kunnen we met nog meer zekerheid kijken of het programma correct werkt en er geen onverwachte nested nodes worden aangemaakt.  
 
 ### Unittests voor de Runner
-Uiteindelijk nog wat tests voor de Runner en de library die wordt gebruikt om alle variabelen en functies op te slaan. 
+Uiteindelijk nog tests voor de Runner en de library die wordt gebruikt om alle variabelen en functies op te slaan. 
 
-De klasse **TestPrograms** test een geschreven DutchPlusPlus programma met een gelijk programma in python en kijkt of het resultaat hetzelfde is. Dit is wellicht één van de allerbelangrijkste tests binnen dit programma. Het test namelijk de complete functionaliteit binnen de zelfgeschreven taal die vergelijkt wordt met een veelgebruikte populaire taal. Door de programma's met verschillende waardes te laten runnen kunnen we met zekerheid zeggen dat de werking van de taal goed is als deze overeenkomt met die van Python.   
+De klasse **TestPrograms** test een geschreven DutchPlusPlus programma met een nagemaakt programma in python en kijkt of het resultaat hetzelfde is. Dit is wellicht één van de allerbelangrijkste tests binnen dit programma. Het test namelijk de complete functionaliteit binnen de zelfgeschreven taal die vergelijkt wordt met een veelgebruikte populaire taal. Door de programma's met verschillende waardes te laten runnen kunnen we met zekerheid zeggen dat de werking van de taal goed is als deze overeenkomt met die van Python.   
 
-De klasse **TestLibrary** is een kleine reeks aan testen die de werking controleert van de Library functies. De tests checken of de location_list en de dictionary goed worden bijgehouden tijdens het runnen.   
+De klasse **TestLibrary** is een kleine reeks aan tests die de werking controleert van de Library functies. De tests checken of de location_list en de dictionary goed worden bijgehouden tijdens het runnen.   
 
 ## Filmpjes
 Hieronder staan een paar filmpjes van de opdracht. Klik op de thumbnail om de video te bekijken op YouTube.    
 
-❗LET OP! Dit filmpje is verouderd. De werking en structuur van dit project kan verschillen.❗  
+❗LET OP! Dit filmpje is waarschijnlijk verouderd. De werking en structuur van dit project kan verschillen.❗  
 
 ### Filmpje Interpreter
 25 augustus 2022  
